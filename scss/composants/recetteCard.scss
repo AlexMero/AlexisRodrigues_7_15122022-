@@ -1,0 +1,62 @@
+.recetteCard{
+    background-color: $grisClair;
+    width: 380px;
+    height: 364px;
+    display: grid;
+    margin-bottom: 50px;
+    border-radius: 5px;
+    grid-template-areas: "image image" "titre temps" "ingredients description";
+    grid-template-rows: 178px 62px 124px;
+    grid-template-columns: 190px 190px;
+
+    .image{
+        grid-area: image;
+        background-color: $gris;
+        border-radius: 5px 5px 0 0;
+    }
+    .titre{
+        grid-area: titre;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-left: 20px;
+        font-family: $fontFamily;
+        font-size: 18px;
+        line-height: 21.6px;
+        font-weight: 400;
+    }
+    .temps{
+        grid-area: temps;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-right: 20px;
+        font-family: $fontFamily;
+        font-size: 18px;
+        line-height: 21.6px;
+        font-weight: 700;
+    }
+    .ingredients{
+        grid-area: ingredients;
+        margin-left: 20px;
+        font-family: $fontFamily;
+        font-size: 12px;
+        line-height: 14.4px;
+        font-weight: 400;
+    }
+    .description{
+        grid-area: description;
+        font-family: $fontFamilySecondaire;
+        font-size: 12px;
+        line-height: 12px;
+        max-height: 33px;
+        font-weight: 400;
+        height: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        
+    }
+}
