@@ -11,11 +11,16 @@ function insertTagContainer(domTarget){
 function updateTagContainer(){
     const tagList = getTagList();
     DOM.innerHTML = "";
-    tagList.forEach(tag => {
-        const element = tag.element;
-        const type = tag.type;
-        new Tag(DOM, { "name": element, "type": type});
-    });
+    for (const type in tagList){
+        tagList[type].forEach(element => {
+            new Tag(DOM, {"name": element, "type": type});
+        });
+    }
+    // tagList.forEach(tag => {
+    //     const element = tag.element;
+    //     const type = tag.type;
+    //     new Tag(DOM, { "name": element, "type": type});
+    // });
 }
 
 export {

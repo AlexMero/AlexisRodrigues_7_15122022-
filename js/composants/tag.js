@@ -1,5 +1,6 @@
 import Component from "./component.js";
 import { deleteTag } from "../services/dataManager.js";
+import { updateRecipeContainer } from "./recipeContainer.js";
 import { updateTagContainer } from "./tagContainer.js";
 
 export default class Tag extends Component {
@@ -45,5 +46,6 @@ export default class Tag extends Component {
     click(){
         deleteTag(this.name, this.type);
         updateTagContainer();
+        updateRecipeContainer();
     }
 }

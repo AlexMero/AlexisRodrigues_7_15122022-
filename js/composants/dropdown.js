@@ -1,6 +1,7 @@
 import { addTag, updateDropdown } from "../services/dataManager.js";
 import Component from "./component.js";
 import { exposeMethod } from "../services/utils.js";
+import { updateRecipeContainer } from "./recipeContainer.js";
 import { updateTagContainer } from "./tagContainer.js";
 
 export default class Dropdown extends Component {
@@ -28,7 +29,7 @@ export default class Dropdown extends Component {
         this.DOM.onclick = this.click.bind(this);
         this.render();
         exposeMethod("selectTag", this.clickOnTag.bind(this));
-        exposeMethod("updateDropdown", this.refreshUl.bind(this));
+        exposeMethod("updateDropdown_"+this.name, this.refreshUl.bind(this));
     }
 
     render(){
@@ -59,8 +60,8 @@ export default class Dropdown extends Component {
         }
     }
 
-    refreshUl(chaine = "", type = this.name){
-        const updatedList = updateDropdown(chaine, type);
+    refreshUl(chaine = ""){
+        const updatedList = updateDropdown(chaine, this.name);
         let html = "";
         updatedList.forEach(element => {
             html += `<li onclick="selectTag('${element}', '${this.name}')">${element}</li>`;
@@ -70,7 +71,7 @@ export default class Dropdown extends Component {
 
     templateDropdownOpen(){
         this.DOM.innerHTML  = /*html*/ `
-            <input type="text" placeholder="Recherche un ingrédient" class="${this.classAdditionnel}" onkeyup="updateDropdown(this.value, '${this.name}')">
+            <input type="text" placeholder="Recherche un ingrédient" class="${this.classAdditionnel}" onkeyup="updateDropdown_${this.name}(this.value)">
             <i class="fas fa-angle-up"></i>
         `;
         this.$ul = document.createElement("ul");
@@ -79,8 +80,9 @@ export default class Dropdown extends Component {
     }
 
     clickOnTag(element, type){
-        console.log(type, element);
+        // console.log(type, element);
         addTag(element, type),
         updateTagContainer();
+        updateRecipeContainer();
     }
 }

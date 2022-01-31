@@ -3,6 +3,7 @@ import Dropdown from "../composants/dropdown.js";
 import RecetteCard from "../composants/recetteCard.js";
 import SearchInput from "../composants/searchInput.js";
 import { getAllData } from "../services/dataManager.js";
+import { insertRecipeContainer } from "../composants/recipeContainer.js";
 import { insertTagContainer } from "../composants/tagContainer.js";
 
 export default class Main extends Component {
@@ -28,11 +29,12 @@ export default class Main extends Component {
         new Dropdown(dropdownContent, {"classAdditionnel": "rouge", "name": "Ustensiles"});
         this.DOM.appendChild(dropdownContent);
 
-        const recetteCardContent = document.createElement("section");
-        recetteCardContent.className = "recetteCardContent";
-        recipesList.forEach(recipe => {
-            new RecetteCard(recetteCardContent, {"recipe": recipe});
-        });
-        this.DOM.appendChild(recetteCardContent);
+        insertRecipeContainer(this.DOM, recipesList);
+        // const recetteCardContent = document.createElement("section");
+        // recetteCardContent.className = "recetteCardContent";
+        // recipesList.forEach(recipe => {
+        //     new RecetteCard(recetteCardContent, {"recipe": recipe});
+        // });
+        // this.DOM.appendChild(recetteCardContent);
     }
 }
