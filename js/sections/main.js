@@ -1,6 +1,5 @@
 import Component from "../composants/component.js";
 import Dropdown from "../composants/dropdown.js";
-import RecetteCard from "../composants/recetteCard.js";
 import SearchInput from "../composants/searchInput.js";
 import { getAllData } from "../services/dataManager.js";
 import { insertRecipeContainer } from "../composants/recipeContainer.js";
