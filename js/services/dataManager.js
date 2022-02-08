@@ -1,7 +1,12 @@
+import Hash from "../services/hash.js";
 import {recipes} from "../datas/datas.js";
-let data;
+
 var tagList = {"Appareil": [], "Ingrédients": [], "Ustensiles": []};
 let inputSearchValue = "";
+const name = new Hash("name", recipes);
+const appliance = new Hash("appliance", recipes);
+const ustensils = new Hash("ustensils", recipes);
+const ingredients = new Hash("ingredients", recipes);
 
 /**
  * return all data in datas.js
@@ -9,8 +14,7 @@ let inputSearchValue = "";
  * @return  {Array}  [return description]
  */
 function getAllData() {
-    data = recipes;
-    return data;
+    return recipes;
 }
 
 /**
@@ -138,18 +142,6 @@ function getTagList(){
 
 function deleteTag(element, type){
     const tagList = getTagList()[type];
-    // for (let i = 0; i < listTag.length; i++) {
-    //     const tag = listTag[i];
-    //     if (tag.element === element && tag.type === type) {
-    //         listTag.splice(i, 1);
-    //     }
-    // }
-    // for (let i = 0; i < tagList[type].length; i++) {
-    //     const tag = tagList[type][i];
-    //     if (tag.element === element) {
-    //         tagList[type].splice(i, 1);
-    //     }
-    // }
     for (let i = 0; i < tagList.length; i++) {
         const tag = tagList[i];
         if (tag === element) {
@@ -161,22 +153,36 @@ function deleteTag(element, type){
 
 function updatedRecipeList(){
     let recipeList = [];
-    for (let i=0, size = getAllData().length; i<size; i++){
+    for (let i=0, size = recipes.length; i<size; i++){
         recipeList.push(i);
     }
-    // console.log("all", recipeList);
-    recipeList = intersectArray(recipeList, getIngredientsId());
-    // console.log("all1", recipeList);
-    recipeList = intersectArray(recipeList, getApplianceId());
-    // console.log("all2", recipeList);
-    recipeList = intersectArray(recipeList, getUstensilsId());
-    // console.log("all3", recipeList);
-    recipeList = searchRecipe(recipeList, inputSearchValue);
-    // console.log("all4", recipeList);
+    tagList.Appareil.forEach(tag => {
+        recipeList = intersectArray(recipeList, appliance.tagList[normalize(tag)]);
+    });
+    tagList.Ustensiles.forEach(tag => {
+        recipeList = intersectArray(recipeList, ustensils.tagList[normalize(tag)]);
+    });
+    tagList.Ingrédients.forEach(tag => {
+        recipeList = intersectArray(recipeList, ingredients.tagList[normalize(tag)]);
+    });
+    if (inputSearchValue.length >= 3) {
+        recipeList = intersectArray(recipeList, searchRecipe(inputSearchValue));
+    }
     const answer = [];
     recipeList.forEach(recipeId => {
         answer.push(recipes[recipeId]);
     });
+    // for (let i=0, size = recipes.length; i<size; i++){
+    //     recipeList.push(i);
+    // }
+    // recipeList = intersectArray(recipeList, getIngredientsId());
+    // recipeList = intersectArray(recipeList, getApplianceId());
+    // recipeList = intersectArray(recipeList, getUstensilsId());
+    // recipeList = searchRecipe(recipeList, inputSearchValue);
+    // const answer = [];
+    // recipeList.forEach(recipeId => {
+    //     answer.push(recipes[recipeId]);
+    // });
     return answer;
 }
 
@@ -184,86 +190,107 @@ function intersectArray(a1, a2){
     return a1.filter(value => a2.includes(value));
 }
 
-function searchRecipe(recipeList, search){
-    let newRecipeList = [];
-    if (search !== "") {
-        recipeList.forEach(recipe => {
-            const recipeName = recipes[recipe].name.toUpperCase();
-            if (recipeName.includes(search.toUpperCase())) {
-                newRecipeList.push(recipe);
-            }
-        });
-    } else {
-        newRecipeList = recipeList;
-    }
-    return newRecipeList;
+function searchRecipe(search){
+    return name.tagHashs[search];
+    // let newRecipeList = [];
+    // if (search !== "") {
+    //     recipeList.forEach(recipe => {
+    //         const recipeName = recipes[recipe].name.toUpperCase();
+    //         if (recipeName.includes(search.toUpperCase())) {
+    //             newRecipeList.push(recipe);
+    //         }
+    //     });
+    // } else {
+    //     newRecipeList = recipeList;
+    // }
+    // return newRecipeList;
 }
 
-function getIngredientsId(){
-    let i=0;
-    const ingredientsId = [];
-    getAllData().forEach(data => {
-        if (tagList.Ingrédients.length !== 0) {
-            data.ingredients.forEach(ingredientObject => {
-                const ingredient = ingredientObject.ingredient;
-                if (tagList.Ingrédients.includes(ingredient)) {
-                    ingredientsId.push(i);
-                }
-            });
-        } else {
-            ingredientsId.push(i);
-        }
-        i++;
-    });
-    // console.log([... new Set(ingredientsId)]);
-    return [... new Set(ingredientsId)];
-}
+// function searchRecipe(recipeList, search){
+//     let newRecipeList = [];
+//     if (search !== "") {
+//         recipeList.forEach(recipe => {
+//             const recipeName = recipes[recipe].name.toUpperCase();
+//             if (recipeName.includes(search.toUpperCase())) {
+//                 newRecipeList.push(recipe);
+//             }
+//         });
+//     } else {
+//         newRecipeList = recipeList;
+//     }
+//     return newRecipeList;
+// }
 
-function getApplianceId(){
-    let i=0;
-    const appliancesId = [];
-    // console.log("test : ", tagList.Appareil);
-    getAllData().forEach(data => {
-        if (tagList.Appareil.length !== 0) {
-            const appliance = data.appliance;
-            if (tagList.Appareil.includes(appliance)) {
-                appliancesId.push(i);
-            }
-        } else {
-            appliancesId.push(i);
-        }
-        i++;
-    });
-    // console.log([... new Set(appliancesId)]);
-    return [... new Set(appliancesId)];
-}
+// function getIngredientsId(){
+//     let i=0;
+//     const ingredientsId = [];
+//     recipes.forEach(data => {
+//         if (tagList.Ingrédients.length !== 0) {
+//             data.ingredients.forEach(ingredientObject => {
+//                 const ingredient = ingredientObject.ingredient;
+//                 if (tagList.Ingrédients.includes(ingredient)) {
+//                     ingredientsId.push(i);
+//                 }
+//             });
+//         } else {
+//             ingredientsId.push(i);
+//         }
+//         i++;
+//     });
+//     // console.log([... new Set(ingredientsId)]);
+//     return [... new Set(ingredientsId)];
+// }
 
-function getUstensilsId(){
-    let i=0;
-    const ustensilsId = [];
-    getAllData().forEach(data => {
-        if (tagList.Ustensiles.length !== 0) {
-            data.ustensils.forEach(ustensil => {
-                if (tagList.Ustensiles.includes(ustensil)) {
-                    ustensilsId.push(i);
-                }
-            });
-        } else {
-            ustensilsId.push(i);
-        }
-        i++;
-    });
-    // console.log([... new Set(ustensilsId)]);
-    return [... new Set(ustensilsId)];
-}
+// function getApplianceId(){
+//     let i=0;
+//     const appliancesId = [];
+//     // console.log("test : ", tagList.Appareil);
+//     recipes.forEach(data => {
+//         if (tagList.Appareil.length !== 0) {
+//             const appliance = data.appliance;
+//             if (tagList.Appareil.includes(appliance)) {
+//                 appliancesId.push(i);
+//             }
+//         } else {
+//             appliancesId.push(i);
+//         }
+//         i++;
+//     });
+//     // console.log([... new Set(appliancesId)]);
+//     return [... new Set(appliancesId)];
+// }
+
+// function getUstensilsId(){
+//     let i=0;
+//     const ustensilsId = [];
+//     recipes.forEach(data => {
+//         if (tagList.Ustensiles.length !== 0) {
+//             data.ustensils.forEach(ustensil => {
+//                 if (tagList.Ustensiles.includes(ustensil)) {
+//                     ustensilsId.push(i);
+//                 }
+//             });
+//         } else {
+//             ustensilsId.push(i);
+//         }
+//         i++;
+//     });
+//     // console.log([... new Set(ustensilsId)]);
+//     return [... new Set(ustensilsId)];
+// }
 
 function updateInputSearchValue(newValue){
     inputSearchValue = newValue;
     return;
 }
 
+function normalize(str){
+    return str
+        .toLowerCase()
+        .normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}
+
 export {
-    getAllData,
     getAllIngredients,
     getAllAppareils,
     getAllUstensiles,

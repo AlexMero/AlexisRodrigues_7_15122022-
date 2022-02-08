@@ -6,7 +6,7 @@
   "scripts": {
     "buildCss": "npx gulp makeCss",
     "watch": "npx gulp watch"
-  },
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
