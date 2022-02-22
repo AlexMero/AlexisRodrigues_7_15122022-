@@ -28,9 +28,9 @@
          */
         let start;
         addElements({
-            "Ustensiles": getAllUstensiles(),
-            "Appareil": getAllAppareils(),
-            "Ingrédients": getAllIngredients()
+            "Ustensiles": ["fourchette"],
+            "Appareil": ["Four"],
+            "Ingrédients": ["sucre", "creme fraiche"]
         })
         for (let max=1000; max>0; max--){
             sequence(1, function () { algos[1].updatedRecipeList() });
@@ -42,8 +42,9 @@
         function addElements(list) {
             for (const [key, value] of Object.entries(list)) {
                 value.forEach(elm => {
+                    console.log(key, elm)
                     sequence(1, function () { algos[1].add(elm, key) });
-                    sequence(2, function () { algos[2].add(elm, key); });
+                    sequence(2, function () { algos[2].add(elm, key) });
                 });
             }
         }
@@ -57,7 +58,7 @@
             const start = Date.now();
             method();
             const gap = Date.now() - start;
-            // console.log(start, " - ", gap);
+            console.log(gap);
             algos[idAlgo].temps += gap;
         }
     </script>

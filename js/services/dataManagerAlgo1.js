@@ -127,7 +127,7 @@ function deleteDropdownElementIfTagExist(tagList, dropdownList, dropdownType){
 }
 
 /**
- * [addTag description]
+ * add an element in tagList
  *
  * @param   {String}  element  [element description]
  * @param   {String}  type     [type description]
@@ -140,24 +140,25 @@ function addTag(element, type){
     return;
 }
 
+/**
+ * return tagList
+ *
+ * @return  {Object}  taglist
+ */
 function getTagList(){
     return tagList;
 }
 
+/**
+ * delete an element in tagList
+ *
+ * @param   {String}  element   element tag
+ * @param   {String}  type      type tag
+ *
+ * @return  {Void}
+ */
 function deleteTag(element, type){
     const tagList = getTagList()[type];
-    // for (let i = 0; i < listTag.length; i++) {
-    //     const tag = listTag[i];
-    //     if (tag.element === element && tag.type === type) {
-    //         listTag.splice(i, 1);
-    //     }
-    // }
-    // for (let i = 0; i < tagList[type].length; i++) {
-    //     const tag = tagList[type][i];
-    //     if (tag.element === element) {
-    //         tagList[type].splice(i, 1);
-    //     }
-    // }
     for (let i = 0; i < tagList.length; i++) {
         const tag = tagList[i];
         if (tag === element) {
@@ -167,20 +168,20 @@ function deleteTag(element, type){
     return;
 }
 
+/**
+ * choose recipe to print from recipeList
+ *
+ * @return  {Array}     list recipe to print
+ */
 function updatedRecipeList(){
     let recipeList = [];
     for (let i=0, size = getAllData().length; i<size; i++){
         recipeList.push(i);
     }
-    // console.log("all", recipeList);
     recipeList = intersectArray(recipeList, getIngredientsId());
-    // console.log("all1", recipeList);
     recipeList = intersectArray(recipeList, getApplianceId());
-    // console.log("all2", recipeList);
     recipeList = intersectArray(recipeList, getUstensilsId());
-    // console.log("all3", recipeList);
     recipeList = searchRecipe(recipeList, inputSearchValue);
-    // console.log("all4", recipeList);
     const answer = [];
     recipeList.forEach(recipeId => {
         answer.push(recipes[recipeId]);
@@ -188,10 +189,26 @@ function updatedRecipeList(){
     return answer;
 }
 
+/**
+ * return common element from 2 array
+ *
+ * @param   {Array}  a1  first array
+ * @param   {Array}  a2  second array
+ *
+ * @return  {Array}
+ */
 function intersectArray(a1, a2){
     return a1.filter(value => a2.includes(value));
 }
 
+/**
+ * Search search string in recipeList
+ *
+ * @param   {Array}     recipeList  array of recipe
+ * @param   {String}    search      string to search in recipeList
+ *
+ * @return  {Array}                 array of recipe where there are search
+ */
 function searchRecipe(recipeList, search){
     let newRecipeList = [];
     if (search !== "") {
@@ -207,6 +224,11 @@ function searchRecipe(recipeList, search){
     return newRecipeList;
 }
 
+/**
+ * return list of id from ingredients
+ *
+ * @return  {Array}  list of id
+ */
 function getIngredientsId(){
     let i=0;
     const ingredientsId = [];
@@ -223,10 +245,14 @@ function getIngredientsId(){
         }
         i++;
     });
-    // console.log([... new Set(ingredientsId)]);
     return [... new Set(ingredientsId)];
 }
 
+/**
+ * return list of id from appliance
+ *
+ * @return  {Array}  list of id
+ */
 function getApplianceId(){
     let i=0;
     const appliancesId = [];
@@ -242,10 +268,14 @@ function getApplianceId(){
         }
         i++;
     });
-    // console.log([... new Set(appliancesId)]);
     return [... new Set(appliancesId)];
 }
 
+/**
+ * return list of id from ustensils
+ *
+ * @return  {Array}  list of id
+ */
 function getUstensilsId(){
     let i=0;
     const ustensilsId = [];
@@ -261,10 +291,16 @@ function getUstensilsId(){
         }
         i++;
     });
-    // console.log([... new Set(ustensilsId)]);
     return [... new Set(ustensilsId)];
 }
 
+/**
+ * change inputSearchValue to new string wrote by user
+ *
+ * @param   {String}  newValue      new string wrote by user
+ *
+ * @return  {Void}
+ */
 function updateInputSearchValue(newValue){
     inputSearchValue = newValue;
     return;

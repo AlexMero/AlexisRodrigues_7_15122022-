@@ -60,6 +60,13 @@ export default class Dropdown extends Component {
         }
     }
 
+    /**
+     * refresh list item
+     *
+     * @param   {String}  chaine    string wrote by user in input
+     *
+     * @return  {Void}              this.$ul.innerHTML changed to new list
+     */
     refreshUl(chaine = ""){
         const updatedList = updateDropdown(chaine, this.name);
         let html = "";
@@ -69,6 +76,11 @@ export default class Dropdown extends Component {
         this.$ul.innerHTML = html;
     }
 
+    /**
+     * get template for dropdown open
+     *
+     * @return  {Void}  this.DOM.innerHTML changed
+     */
     templateDropdownOpen(){
         this.DOM.innerHTML  = /*html*/ `
             <input type="text" placeholder="Recherche un ingrédient" class="${this.classAdditionnel}" onkeyup="updateDropdown_${this.name}(this.value)">
@@ -79,8 +91,14 @@ export default class Dropdown extends Component {
         this.refreshUl();
     }
 
+    /**
+     *
+     * @param   {String}  element  tag element
+     * @param   {String}  type     tag type
+     *
+     * @return  {Void}
+     */
     clickOnTag(element, type){
-        // console.log(type, element);
         addTag(element, type),
         updateTagContainer();
         updateRecipeContainer();

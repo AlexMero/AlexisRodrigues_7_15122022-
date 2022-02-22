@@ -4,10 +4,22 @@ import { getTagList } from "../services/dataManager.js";
 const DOM = document.createElement("section");
 DOM.className = "tagContent";
 
+/**
+ * fonction class constructor
+ *
+ * @param   {HTMLElement}   domTarget           target html element
+ *
+ * @return  {Void}                              constructor
+ */
 function insertTagContainer(domTarget){
     domTarget.appendChild(DOM);
 }
 
+/**
+ * refresh (update) tagContainer content
+ *
+ * @return  {Void}
+ */
 function updateTagContainer(){
     const tagList = getTagList();
     DOM.innerHTML = "";
@@ -16,11 +28,6 @@ function updateTagContainer(){
             new Tag(DOM, {"name": element, "type": type});
         });
     }
-    // tagList.forEach(tag => {
-    //     const element = tag.element;
-    //     const type = tag.type;
-    //     new Tag(DOM, { "name": element, "type": type});
-    // });
 }
 
 export {

@@ -19,13 +19,30 @@ export default class Hash{
         for ( let i=0, size=recipes.length; i<size; i++) {
             this[extractType](recipes[i][type], i);
         }
+        // console.log(this);
+        window[type] = this;
     }
 
+    /**
+     * [defineExtractor description]
+     *
+     * @param   {Array}  recipes    recipeList
+     *
+     * @return  {String}
+     */
     defineExtractor(recipes){
         if (this.type ==="name") return "extractName";
         return typeof recipes[0][this.type] === "string" ? "extractFromString" : "extractFromArray";
     }
 
+    /**
+     * [extractName description]
+     *
+     * @param   {String}  str  [str description]
+     * @param   {String}  id   [id description]
+     *
+     * @return  {Void}
+     */
     extractName(str, id){
         str = this.normalize(str);
         this.hashLoop(str, id, "tagHashs") ;
@@ -53,6 +70,14 @@ export default class Hash{
         this.hydrateTagHashs(str, id);
     }
 
+    /**
+     * [extractFromArray description]
+     *
+     * @param   {Array}  array      [array description]
+     * @param   {Number}  id        [id description]
+     *
+     * @return  {Void}              [return description]
+     */
     extractFromArray(array, id){
         if (this.type === "ingredients") {
             array.forEach(ingredientsList => {
@@ -105,12 +130,3 @@ export default class Hash{
     }
 
 }
-
-// tagHash = {
-//     "fou" : [77, 98, 103],
-//     "four" : [77, 98, 103],
-//     "foure" : [98, 103],
-//     "fouret" : [98, 103],
-//     "fourett" : [98, 103],
-//     "fourette" : [98, 103],
-// }
