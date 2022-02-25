@@ -1,9 +1,12 @@
+import {intersectArray} from "./dataManager.js";
 export default class Hash{
     activesTags = [];
 
     tagHashs = [];
 
     tagList = [];
+
+    allIds = [];
 
     /**
      * [constructor description]
@@ -18,6 +21,7 @@ export default class Hash{
         const extractType = this.defineExtractor(recipes);
         for ( let i=0, size=recipes.length; i<size; i++) {
             this[extractType](recipes[i][type], i);
+            this.allIds.push(i);
         }
         // console.log(this);
         window[type] = this;
@@ -94,7 +98,14 @@ export default class Hash{
     }
 
     getRecipesId(){
-
+        if (this.type === "name") return this.activesTags;
+        if (this.activesTags.length === 0) return this.allIds;
+        let ids = this.allIds;
+        this.activesTags.forEach(tag => {
+            // console.log(tag, " - ", this.tagList, " # ", this.tagList[tag], " ## ", this.tagList[this.normalize(tag)]);
+            ids = intersectArray(ids, this.tagList[tag]);
+        });
+        return [... new Set(ids)];
     }
 
     hashLoop(str, id, target){
@@ -127,6 +138,28 @@ export default class Hash{
         return str
             .toLowerCase()
             .normalize("NFD").replace(/\p{Diacritic}/gu, "");
+    }
+
+    addTag(tag){
+        this.activesTags.push(tag);
+    }
+
+    removeTag(tag){
+        for (let i = 0; i < this.activesTags.length; i++) {
+            if (this.normalize(this.activesTags[i]) === tag) {
+                this.activesTags.splice(i, 1);
+            }
+        }
+    }
+
+    filterInput(str) {
+        const dropdownList = [];
+        for (const [key] of Object.entries(this.tagList)) {
+            if (key.indexOf(str) !== -1) {
+                dropdownList.push(key);
+            }
+        }
+        return dropdownList;
     }
 
 }

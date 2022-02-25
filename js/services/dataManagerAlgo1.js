@@ -100,30 +100,7 @@ function updateDropdown(rch, type){
         dropdownList = datas;
     }
 
-    //delete Dropdown Element If Tag Exist
-    const tagList = getTagList();
-    dropdownList = deleteDropdownElementIfTagExist(tagList, dropdownList, type);
-
     return dropdownList;
-}
-
-/**
- * Compare tagList & dropdownList pour enelever de dropdownList les éléments en communs
- *
- * @param   {Object}  tagList        list des tags
- * @param   {Array}  dropdownList   list des elements du sropdown
- * @param   {String}  dropdownType  type du Dropdown (Ingrédients, Appareil ou Ustensiles)
- *
- * @return  {Array}                 Liste des elements du dropdown sans les elements qui sont dans la listTag
- */
-function deleteDropdownElementIfTagExist(tagList, dropdownList, dropdownType){
-    const newList = [...dropdownList];
-    let index;
-    tagList[dropdownType].forEach(tag => {
-        index = newList.indexOf(tag);
-        if (index > -1) newList.splice(index, 1);
-    });
-    return newList;
 }
 
 /**

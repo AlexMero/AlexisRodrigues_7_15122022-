@@ -1,21 +1,11 @@
 import Hash from "../services/hash.js";
 import {recipes} from "../datas/datas.js";
 
-var tagList = {"Appareil": [], "Ingrédients": [], "Ustensiles": []};
 let inputSearchValue = "";
 const name = new Hash("name", recipes);
 const appliance = new Hash("appliance", recipes);
 const ustensils = new Hash("ustensils", recipes);
 const ingredients = new Hash("ingredients", recipes);
-
-/**
- * return all data in datas.js
- *
- * @return  {Array}  [return description]
- */
-function getAllData() {
-    return recipes;
-}
 
 /**
  * search all ingredients in getAllData
@@ -24,15 +14,9 @@ function getAllData() {
  */
 function getAllIngredients(){
     const ingredientsList = [];
-    const datas = getAllData();
-    datas.forEach(data => {
-        data.ingredients.forEach(ingredientObject => {
-            const ingredient = ingredientObject.ingredient;
-            if (!ingredientsList.includes(ingredient)) {
-                ingredientsList.push(ingredient);
-            }
-        });
-    });
+    for (const [key] of Object.entries(ingredients.tagList)) {
+        ingredientsList.push(key);
+    }
     return ingredientsList;
 }
 
@@ -43,13 +27,9 @@ function getAllIngredients(){
  */
 function getAllAppareils(){
     const appareilsList = [];
-    const datas = getAllData();
-    datas.forEach(recipe => {
-        const appareil = recipe.appliance;
-        if (!appareilsList.includes(appareil)) {
-            appareilsList.push(appareil);
-        }
-    });
+    for (const [key] of Object.entries(appliance.tagList)) {
+        appareilsList.push(key);
+    }
     return appareilsList;
 }
 
@@ -60,15 +40,9 @@ function getAllAppareils(){
  */
 function getAllUstensiles(){
     const ustensilesList = [];
-    const datas = getAllData();
-    datas.forEach(recipe => {
-        const ustensiles = recipe.ustensils;
-        ustensiles.forEach(ustensile => {
-            if (!ustensilesList.includes(ustensile)) {
-                ustensilesList.push(ustensile);
-            }
-        });
-    });
+    for (const [key] of Object.entries(ustensils.tagList)) {
+        ustensilesList.push(key);
+    }
     return ustensilesList;
 }
 
@@ -82,52 +56,21 @@ function getAllUstensiles(){
  */
 function updateDropdown(rch, type){
     let dropdownList = [];
-    let datas;
     switch (type) {
             case "Ingrédients":
-                datas = getAllIngredients();
+                dropdownList = getAllIngredients();
+                if (rch !== "") dropdownList = ingredients.filterInput(rch);
                 break;
             case "Appareil":
-                datas = getAllAppareils();
+                dropdownList = getAllAppareils();
+                if (rch !== "") dropdownList = appliance.filterInput(rch);
                 break;
             case "Ustensiles":
-                datas = getAllUstensiles();
+                dropdownList = getAllUstensiles();
+                if (rch !== "") dropdownList = ustensils.filterInput(rch);
                 break;
     }
-    if (rch !== "") {
-        datas.forEach(ingredient => {
-            if (ingredient.toLowerCase().indexOf(rch.toLowerCase()) !== -1) {
-                dropdownList.push(ingredient);
-            }
-        });
-    } else {
-        dropdownList = datas;
-    }
-
-    //delete Dropdown Element If Tag Exist
-    const tagList = getTagList();
-    dropdownList = deleteDropdownElementIfTagExist(tagList, dropdownList, type);
-
     return dropdownList;
-}
-
-/**
- * Compare tagList & dropdownList pour enelever de dropdownList les éléments en communs
- *
- * @param   {Object}  tagList        list des tags
- * @param   {Array}  dropdownList   list des elements du sropdown
- * @param   {String}  dropdownType  type du Dropdown (Ingrédients, Appareil ou Ustensiles)
- *
- * @return  {Array}                 Liste des elements du dropdown sans les elements qui sont dans la listTag
- */
-function deleteDropdownElementIfTagExist(tagList, dropdownList, dropdownType){
-    const newList = [...dropdownList];
-    let index;
-    tagList[dropdownType].forEach(tag => {
-        index = newList.indexOf(tag);
-        if (index > -1) newList.splice(index, 1);
-    });
-    return newList;
 }
 
 /**
@@ -139,8 +82,18 @@ function deleteDropdownElementIfTagExist(tagList, dropdownList, dropdownType){
  * @return  {Void}
  */
 function addTag(element, type){
-    //tagList.push({"element": element, "type": type});
-    tagList[type].push(element);
+    // tagList[type].push(element);
+    switch (type) {
+            case "Ingrédients":
+                ingredients.addTag(element);
+                break;
+            case "Appareil":
+                appliance.addTag(element);
+                break;
+            case "Ustensiles":
+                ustensils.addTag(element);
+                break;
+    }
     return;
 }
 
@@ -150,7 +103,8 @@ function addTag(element, type){
  * @return  {Object}  taglist
  */
 function getTagList(){
-    return tagList;
+    const tagActiveList = {"Appareil": appliance.activesTags, "Ingrédients": ingredients.activesTags, "Ustensiles": ustensils.activesTags};
+    return tagActiveList;
 }
 
 /**
@@ -162,12 +116,16 @@ function getTagList(){
  * @return  {Void}
  */
 function deleteTag(element, type){
-    const tagList = getTagList()[type];
-    for (let i = 0; i < tagList.length; i++) {
-        const tag = tagList[i];
-        if (tag === element) {
-            tagList.splice(i, 1);
-        }
+    switch (type) {
+            case "Ingrédients":
+                ingredients.removeTag(element);
+                break;
+            case "Appareil":
+                appliance.removeTag(element);
+                break;
+            case "Ustensiles":
+                ustensils.removeTag(element);
+                break;
     }
     return;
 }
@@ -178,21 +136,12 @@ function deleteTag(element, type){
  * @return  {Array}     list recipe to print
  */
 function updatedRecipeList(){
-    let recipeList = [];
-    for (let i=0, size = recipes.length; i<size; i++){
-        recipeList.push(i);
-    }
-    tagList.Appareil.forEach(tag => {
-        recipeList = intersectArray(recipeList, appliance.tagList[normalize(tag)]);
-    });
-    tagList.Ustensiles.forEach(tag => {
-        recipeList = intersectArray(recipeList, ustensils.tagList[normalize(tag)]);
-    });
-    tagList.Ingrédients.forEach(tag => {
-        recipeList = intersectArray(recipeList, ingredients.tagList[normalize(tag)]);
-    });
+    let recipeList = ingredients.allIds;
+    recipeList = intersectArray(recipeList, appliance.getRecipesId());
+    recipeList = intersectArray(recipeList, ustensils.getRecipesId());
+    recipeList = intersectArray(recipeList, ingredients.getRecipesId());
     if (inputSearchValue.length >= 3) {
-        recipeList = intersectArray(recipeList, searchRecipe(inputSearchValue));
+        recipeList = intersectArray(recipeList, name.tagHashs[normalize(inputSearchValue)]);
     }
     const answer = [];
     recipeList.forEach(recipeId => {
@@ -211,17 +160,6 @@ function updatedRecipeList(){
  */
 function intersectArray(a1, a2){
     return a1.filter(value => a2.includes(value));
-}
-
-/**
- * return element from tagHashs
- *
- * @param   {String}  search    string from user
- *
- * @return  {Array}             tagHashs element
- */
-function searchRecipe(search){
-    return name.tagHashs[search];
 }
 
 /**
@@ -258,5 +196,6 @@ export {
     deleteTag,
     getTagList,
     updatedRecipeList,
-    updateInputSearchValue
+    updateInputSearchValue,
+    intersectArray
 };

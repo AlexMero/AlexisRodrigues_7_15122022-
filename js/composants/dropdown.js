@@ -1,4 +1,4 @@
-import { addTag, updateDropdown } from "../services/dataManager.js";
+import { addTag, getTagList, updateDropdown } from "../services/dataManager.js";
 import Component from "./component.js";
 import { exposeMethod } from "../services/utils.js";
 import { updateRecipeContainer } from "./recipeContainer.js";
@@ -70,8 +70,11 @@ export default class Dropdown extends Component {
     refreshUl(chaine = ""){
         const updatedList = updateDropdown(chaine, this.name);
         let html = "";
+        const activedTag = getTagList()[this.name];
         updatedList.forEach(element => {
-            html += `<li onclick="selectTag('${element}', '${this.name}')">${element}</li>`;
+            if (activedTag.indexOf(element) === -1){
+                html += `<li onclick="selectTag('${element}', '${this.name}')">${element}</li>`;
+            }
         });
         this.$ul.innerHTML = html;
     }

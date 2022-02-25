@@ -6,9 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script type="module">
-        import { updatedRecipeList as algo1, addTag as addAlgo1, getAllIngredients, getAllAppareils, getAllUstensiles } from "./js/services/dataManagerAlgo1.js";
-        import { updatedRecipeList as algo2, addTag as addAlgo2} from "./js/services/dataManager.js";
-
+        import { updatedRecipeList as algo1, addTag as addAlgo1} from "./js/services/dataManagerAlgo1.js";
+        import { updatedRecipeList as algo2, addTag as addAlgo2, getAllIngredients, getAllAppareils, getAllUstensiles } from "./js/services/dataManager.js";
+        
+        document.body.innerHTML = /*html*/`
+            <h1>Test des algorithmes</h1>
+            <h2>Résultats des test</h2>
+            <p id="resultatTest"></p>
+            <h2>Les données renseignés pour ce test</h2>
+            <p id="dataTest"></p>
+        `;
         const algos = {
             1: {
                 temps: 0,
@@ -28,21 +35,26 @@
          */
         let start;
         addElements({
-            "Ustensiles": ["fourchette"],
-            "Appareil": ["Four"],
-            "Ingrédients": ["sucre", "creme fraiche"]
+            "Ustensiles": getAllUstensiles(),
+            "Appareil": getAllAppareils(),
+            "Ingrédients": getAllIngredients()
         })
         for (let max=1000; max>0; max--){
             sequence(1, function () { algos[1].updatedRecipeList() });
             sequence(2, function () { algos[2].updatedRecipeList(); });
         }
 
-        console.log("algo 1 : ", algos[1].temps, " ms", "\r\n", "algo 2 : ", algos[2].temps, " ms");
+        document.getElementById("resultatTest").innerHTML = /*html*/`
+            Algorithme 1 : ${algos[1].temps} ms <br>
+            Algorithme 2 : ${algos[2].temps} ms
+        `;
+        // console.log("algo 1 : ", algos[1].temps, " ms", "\r\n", "algo 2 : ", algos[2].temps, " ms");
 
         function addElements(list) {
             for (const [key, value] of Object.entries(list)) {
                 value.forEach(elm => {
-                    console.log(key, elm)
+                    document.getElementById("dataTest").innerHTML = document.getElementById("dataTest").innerHTML + elm + "<br>";
+                    // console.log(key, elm)
                     sequence(1, function () { algos[1].add(elm, key) });
                     sequence(2, function () { algos[2].add(elm, key) });
                 });
@@ -58,7 +70,6 @@
             const start = Date.now();
             method();
             const gap = Date.now() - start;
-            console.log(gap);
             algos[idAlgo].temps += gap;
         }
     </script>
