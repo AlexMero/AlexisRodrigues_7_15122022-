@@ -145,11 +145,9 @@ export default class Hash{
     }
 
     removeTag(tag){
-        for (let i = 0; i < this.activesTags.length; i++) {
-            if (this.normalize(this.activesTags[i]) === tag) {
-                this.activesTags.splice(i, 1);
-            }
-        }
+        const index = this.activesTags.indexOf(tag);
+        if (index === -1) return;
+        this.activesTags.splice(index, 1);
     }
 
     filterInput(str) {

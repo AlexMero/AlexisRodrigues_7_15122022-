@@ -2,10 +2,17 @@ import Hash from "../services/hash.js";
 import {recipes} from "../datas/datas.js";
 
 let inputSearchValue = "";
-const name = new Hash("name", recipes);
-const appliance = new Hash("appliance", recipes);
-const ustensils = new Hash("ustensils", recipes);
-const ingredients = new Hash("ingredients", recipes);
+// const name = new Hash("name", recipes);
+// const appliance = new Hash("appliance", recipes);
+// const ustensils = new Hash("ustensils", recipes);
+// const ingredients = new Hash("ingredients", recipes);
+
+const src = {
+    "Appareil" : new Hash("appliance", recipes),
+    "Ingrédients" : new Hash("ingredients", recipes),
+    "Ustensiles" : new Hash("ustensils", recipes),
+    "name" : new Hash("name", recipes)
+};
 
 /**
  * search all ingredients in getAllData
@@ -14,7 +21,7 @@ const ingredients = new Hash("ingredients", recipes);
  */
 function getAllIngredients(){
     const ingredientsList = [];
-    for (const [key] of Object.entries(ingredients.tagList)) {
+    for (const [key] of Object.entries(src["Ingrédients"].tagList)) {
         ingredientsList.push(key);
     }
     return ingredientsList;
@@ -27,7 +34,7 @@ function getAllIngredients(){
  */
 function getAllAppareils(){
     const appareilsList = [];
-    for (const [key] of Object.entries(appliance.tagList)) {
+    for (const [key] of Object.entries(src["Appareil"].tagList)) {
         appareilsList.push(key);
     }
     return appareilsList;
@@ -40,7 +47,7 @@ function getAllAppareils(){
  */
 function getAllUstensiles(){
     const ustensilesList = [];
-    for (const [key] of Object.entries(ustensils.tagList)) {
+    for (const [key] of Object.entries(src["Ustensiles"].tagList)) {
         ustensilesList.push(key);
     }
     return ustensilesList;
@@ -59,17 +66,16 @@ function updateDropdown(rch, type){
     switch (type) {
             case "Ingrédients":
                 dropdownList = getAllIngredients();
-                if (rch !== "") dropdownList = ingredients.filterInput(rch);
                 break;
             case "Appareil":
                 dropdownList = getAllAppareils();
-                if (rch !== "") dropdownList = appliance.filterInput(rch);
                 break;
             case "Ustensiles":
                 dropdownList = getAllUstensiles();
-                if (rch !== "") dropdownList = ustensils.filterInput(rch);
                 break;
     }
+    if (rch !== "") dropdownList = src[type].filterInput(rch);
+    // ingredients.filterInput(rch)
     return dropdownList;
 }
 
@@ -82,18 +88,7 @@ function updateDropdown(rch, type){
  * @return  {Void}
  */
 function addTag(element, type){
-    // tagList[type].push(element);
-    switch (type) {
-            case "Ingrédients":
-                ingredients.addTag(element);
-                break;
-            case "Appareil":
-                appliance.addTag(element);
-                break;
-            case "Ustensiles":
-                ustensils.addTag(element);
-                break;
-    }
+    src[type].addTag(element);
     return;
 }
 
@@ -103,7 +98,7 @@ function addTag(element, type){
  * @return  {Object}  taglist
  */
 function getTagList(){
-    const tagActiveList = {"Appareil": appliance.activesTags, "Ingrédients": ingredients.activesTags, "Ustensiles": ustensils.activesTags};
+    const tagActiveList = {"Appareil": src["Appareil"].activesTags, "Ingrédients": src["Ingrédients"].activesTags, "Ustensiles": src["Ustensiles"].activesTags};
     return tagActiveList;
 }
 
@@ -116,17 +111,7 @@ function getTagList(){
  * @return  {Void}
  */
 function deleteTag(element, type){
-    switch (type) {
-            case "Ingrédients":
-                ingredients.removeTag(element);
-                break;
-            case "Appareil":
-                appliance.removeTag(element);
-                break;
-            case "Ustensiles":
-                ustensils.removeTag(element);
-                break;
-    }
+    src[type].removeTag(element);
     return;
 }
 
@@ -136,12 +121,16 @@ function deleteTag(element, type){
  * @return  {Array}     list recipe to print
  */
 function updatedRecipeList(){
-    let recipeList = ingredients.allIds;
-    recipeList = intersectArray(recipeList, appliance.getRecipesId());
-    recipeList = intersectArray(recipeList, ustensils.getRecipesId());
-    recipeList = intersectArray(recipeList, ingredients.getRecipesId());
+    let recipeList = src["Ingrédients"].allIds;
+    for (const key of Object.keys(src)){
+        if (key === "name" && inputSearchValue.length < 3) continue;
+        recipeList = intersectArray(recipeList, src[key].getRecipesId());
+    }
+    // recipeList = intersectArray(recipeList, appliance.getRecipesId());
+    // recipeList = intersectArray(recipeList, ustensils.getRecipesId());
+    // recipeList = intersectArray(recipeList, ingredients.getRecipesId());
     if (inputSearchValue.length >= 3) {
-        recipeList = intersectArray(recipeList, name.tagHashs[normalize(inputSearchValue)]);
+        recipeList = intersectArray(recipeList, src["name"].tagHashs[normalize(inputSearchValue)]);
     }
     const answer = [];
     recipeList.forEach(recipeId => {
