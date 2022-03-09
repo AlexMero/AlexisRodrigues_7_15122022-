@@ -122,14 +122,18 @@ function deleteTag(element, type){
  */
 function updatedRecipeList(){
     let recipeList = src["Ingrédients"].allIds;
+    // console.log(src);
     for (const key of Object.keys(src)){
-        if (key === "name" && inputSearchValue.length < 3) continue;
+        if (key === "name") continue;
         recipeList = intersectArray(recipeList, src[key].getRecipesId());
+        console.log(key, src[key].getRecipesId(), recipeList);
     }
     // recipeList = intersectArray(recipeList, appliance.getRecipesId());
     // recipeList = intersectArray(recipeList, ustensils.getRecipesId());
     // recipeList = intersectArray(recipeList, ingredients.getRecipesId());
+    // console.log(recipeList, src["name"]);
     if (inputSearchValue.length >= 3) {
+        console.log(recipeList);
         recipeList = intersectArray(recipeList, src["name"].tagHashs[normalize(inputSearchValue)]);
     }
     const answer = [];

@@ -98,6 +98,7 @@ export default class Hash{
     }
 
     getRecipesId(){
+        // console.log(this.type, this.activesTags);
         if (this.type === "name") return this.activesTags;
         if (this.activesTags.length === 0) return this.allIds;
         let ids = this.allIds;
