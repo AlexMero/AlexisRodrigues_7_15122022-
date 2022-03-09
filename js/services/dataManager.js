@@ -2,10 +2,6 @@ import Hash from "../services/hash.js";
 import {recipes} from "../datas/datas.js";
 
 let inputSearchValue = "";
-// const name = new Hash("name", recipes);
-// const appliance = new Hash("appliance", recipes);
-// const ustensils = new Hash("ustensils", recipes);
-// const ingredients = new Hash("ingredients", recipes);
 
 const src = {
     "Appareil" : new Hash("appliance", recipes),
@@ -75,7 +71,6 @@ function updateDropdown(rch, type){
                 break;
     }
     if (rch !== "") dropdownList = src[type].filterInput(rch);
-    // ingredients.filterInput(rch)
     return dropdownList;
 }
 
@@ -122,16 +117,11 @@ function deleteTag(element, type){
  */
 function updatedRecipeList(){
     let recipeList = src["Ingrédients"].allIds;
-    // console.log(src);
     for (const key of Object.keys(src)){
         if (key === "name") continue;
         recipeList = intersectArray(recipeList, src[key].getRecipesId());
         console.log(key, src[key].getRecipesId(), recipeList);
     }
-    // recipeList = intersectArray(recipeList, appliance.getRecipesId());
-    // recipeList = intersectArray(recipeList, ustensils.getRecipesId());
-    // recipeList = intersectArray(recipeList, ingredients.getRecipesId());
-    // console.log(recipeList, src["name"]);
     if (inputSearchValue.length >= 3) {
         console.log(recipeList);
         if (src["name"].tagHashs[normalize(inputSearchValue)]){

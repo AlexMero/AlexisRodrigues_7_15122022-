@@ -112,7 +112,6 @@ function updateDropdown(rch, type){
  * @return  {Void}           [return description]
  */
 function addTag(element, type){
-    //tagList.push({"element": element, "type": type});
     tagList[type].push(element);
     return;
 }
@@ -233,7 +232,6 @@ function getIngredientsId(){
 function getApplianceId(){
     let i=0;
     const appliancesId = [];
-    // console.log("test : ", tagList.Appareil);
     getAllData().forEach(data => {
         if (tagList.Appareil.length !== 0) {
             const appliance = data.appliance;

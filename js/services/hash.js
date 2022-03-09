@@ -23,7 +23,6 @@ export default class Hash{
             this[extractType](recipes[i][type], i);
             this.allIds.push(i);
         }
-        // console.log(this);
         window[type] = this;
     }
 
@@ -98,12 +97,10 @@ export default class Hash{
     }
 
     getRecipesId(){
-        // console.log(this.type, this.activesTags);
         if (this.type === "name") return this.activesTags;
         if (this.activesTags.length === 0) return this.allIds;
         let ids = this.allIds;
         this.activesTags.forEach(tag => {
-            // console.log(tag, " - ", this.tagList, " # ", this.tagList[tag], " ## ", this.tagList[this.normalize(tag)]);
             ids = intersectArray(ids, this.tagList[tag]);
         });
         return [... new Set(ids)];
