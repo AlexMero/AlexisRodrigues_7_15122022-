@@ -134,7 +134,11 @@ function updatedRecipeList(){
     // console.log(recipeList, src["name"]);
     if (inputSearchValue.length >= 3) {
         console.log(recipeList);
-        recipeList = intersectArray(recipeList, src["name"].tagHashs[normalize(inputSearchValue)]);
+        if (src["name"].tagHashs[normalize(inputSearchValue)]){
+            recipeList = intersectArray(recipeList, src["name"].tagHashs[normalize(inputSearchValue)]);
+        } else {
+            recipeList = [];
+        }
     }
     const answer = [];
     recipeList.forEach(recipeId => {
