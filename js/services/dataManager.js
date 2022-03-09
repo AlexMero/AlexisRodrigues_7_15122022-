@@ -120,10 +120,8 @@ function updatedRecipeList(){
     for (const key of Object.keys(src)){
         if (key === "name") continue;
         recipeList = intersectArray(recipeList, src[key].getRecipesId());
-        console.log(key, src[key].getRecipesId(), recipeList);
     }
     if (inputSearchValue.length >= 3) {
-        console.log(recipeList);
         if (src["name"].tagHashs[normalize(inputSearchValue)]){
             recipeList = intersectArray(recipeList, src["name"].tagHashs[normalize(inputSearchValue)]);
         } else {
