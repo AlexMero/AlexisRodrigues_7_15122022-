@@ -27,9 +27,15 @@ function insertRecipeContainer(domTarget, recipeList){
 function updateRecipeContainer(){
     const recipeList = updatedRecipeList();
     DOM.innerHTML = "";
-    recipeList.forEach(recipe => {
-        new RecetteCard(DOM, {"recipe": recipe});
-    });
+    if (recipeList.length > 0) {
+        recipeList.forEach(recipe => {
+            new RecetteCard(DOM, {"recipe": recipe});
+        });
+    } else {
+        DOM.innerHTML = `
+            <p class="no-answer">Aucune recette ne correspond à votre critère ...</p>
+        `;
+    }
 }
 
 export {
