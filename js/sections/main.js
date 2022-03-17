@@ -21,9 +21,12 @@ export default class Main extends Component {
 
         const dropdownContent = document.createElement("section");
         dropdownContent.className = "dropdownContent";
-        new Dropdown(dropdownContent, {"classAdditionnel": "bleu", "name": "Ingrédients"});
-        new Dropdown(dropdownContent, {"classAdditionnel": "vert", "name": "Appareil"});
-        new Dropdown(dropdownContent, {"classAdditionnel": "rouge", "name": "Ustensiles"});
+        // @ts-ignore
+        window.ddIngredients = new Dropdown(dropdownContent, {"classAdditionnel": "bleu", "name": "Ingrédients"});
+        // @ts-ignore
+        window.ddAppareils = new Dropdown(dropdownContent, {"classAdditionnel": "vert", "name": "Appareil"});
+        // @ts-ignore
+        window.ddUstensils = new Dropdown(dropdownContent, {"classAdditionnel": "rouge", "name": "Ustensiles"});
         this.DOM.appendChild(dropdownContent);
 
         insertRecipeContainer(this.DOM, recipes);

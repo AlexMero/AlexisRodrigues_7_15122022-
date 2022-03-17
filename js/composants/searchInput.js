@@ -24,5 +24,11 @@ export default class SearchInput extends Component {
         updateInputSearchValue(document.getElementById("searchInput").value);
         updatedRecipeList();
         updateRecipeContainer();
+        // @ts-ignore
+        window.ddIngredients.render();
+        // @ts-ignore
+        window.ddAppareils.render();
+        // @ts-ignore
+        window.ddUstensils.render();
     }
 }

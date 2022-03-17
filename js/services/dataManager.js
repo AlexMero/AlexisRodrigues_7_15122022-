@@ -16,11 +16,7 @@ const src = {
  * @return  {Array}  [return description]
  */
 function getAllIngredients(){
-    const ingredientsList = [];
-    for (const [key] of Object.entries(src["Ingrédients"].tagList)) {
-        ingredientsList.push(key);
-    }
-    return ingredientsList;
+    return Object.keys(src["Ingrédients"].tagList);
 }
 
 /**
@@ -29,11 +25,7 @@ function getAllIngredients(){
  * @return  {Array}  [return description]
  */
 function getAllAppareils(){
-    const appareilsList = [];
-    for (const [key] of Object.entries(src["Appareil"].tagList)) {
-        appareilsList.push(key);
-    }
-    return appareilsList;
+    return Object.keys(src["Appareil"].tagList);
 }
 
 /**
@@ -42,11 +34,7 @@ function getAllAppareils(){
  * @return  {Array}  [return description]
  */
 function getAllUstensiles(){
-    const ustensilesList = [];
-    for (const [key] of Object.entries(src["Ustensiles"].tagList)) {
-        ustensilesList.push(key);
-    }
-    return ustensilesList;
+    return Object.keys(src["Ustensiles"].tagList);
 }
 
 /**
@@ -132,8 +120,20 @@ function updatedRecipeList(){
     recipeList.forEach(recipeId => {
         answer.push(recipes[recipeId]);
     });
+    src.Appareil.limit(recipeList);
+    src["Ingrédients"].limit(recipeList);
+    src.Ustensiles.limit(recipeList);
+    // console.log(src["name"].tagHashs);
     return answer;
 }
+
+// function filterDropdowns(filtres){
+//     const applianceList = [];
+//     filtres.forEach(recipe => {
+//         applianceList.push(recipe.appliance);
+//     });
+//     console.log(applianceList);
+// }
 
 /**
  * return common element from 2 array
