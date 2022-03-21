@@ -26,6 +26,7 @@ export default class Hash{
      */
     constructor(type, recipes){
         this.type = type;
+        this.recipes = recipes;
         const extractType = this.defineExtractor(recipes);
         for ( let i=0, size=recipes.length; i<size; i++) {
             if (this.type === "name"){
@@ -180,6 +181,10 @@ export default class Hash{
      * @return  {void}            [return description]
      */
     limit(listOfId){
+        const extractType = this.defineExtractor(this.recipes);
+        for ( let i=0, size=this.recipes.length; i<size; i++) {
+            this[extractType](this.recipes[i][this.type], i);
+        }
         let toRemove;
         for (const [tagName, tagIdList] of Object.entries(this.tagList)){
             toRemove = true;
